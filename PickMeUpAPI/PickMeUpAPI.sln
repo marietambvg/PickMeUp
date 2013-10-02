@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PickMeUp.Models", "PickMeUp.Models\PickMeUp.Models.csproj", "{2888779D-810B-428A-8CC1-97E1BA95C7FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PickMeUp.Data", "PickMeUp.Data\PickMeUp.Data.csproj", "{46FF77A8-7179-4974-8F7E-33C421565185}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PickMeUp.RestAPI", "PickMeUp.RestAPI\PickMeUp.RestAPI.csproj", "{0CC13C03-B999-497C-BB17-6601F6809D75}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2888779D-810B-428A-8CC1-97E1BA95C7FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2888779D-810B-428A-8CC1-97E1BA95C7FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2888779D-810B-428A-8CC1-97E1BA95C7FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2888779D-810B-428A-8CC1-97E1BA95C7FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46FF77A8-7179-4974-8F7E-33C421565185}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46FF77A8-7179-4974-8F7E-33C421565185}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46FF77A8-7179-4974-8F7E-33C421565185}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46FF77A8-7179-4974-8F7E-33C421565185}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CC13C03-B999-497C-BB17-6601F6809D75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CC13C03-B999-497C-BB17-6601F6809D75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CC13C03-B999-497C-BB17-6601F6809D75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CC13C03-B999-497C-BB17-6601F6809D75}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

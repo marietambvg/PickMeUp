@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
+  <Identity Name="72040469-b3be-4dd1-997b-0f149923a312" Publisher="CN=user" Version="1.0.0.0" />
+  <Properties>
+    <DisplayName>Daily Motivator</DisplayName>
+    <PublisherDisplayName>Marieta Georgieva</PublisherDisplayName>
+    <Logo>Assets\50-50.png</Logo>
+  </Properties>
+  <Prerequisites>
+    <OSMinVersion>6.2.1</OSMinVersion>
+    <OSMaxVersionTested>6.2.1</OSMaxVersionTested>
+  </Prerequisites>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="PickMeUpProject.App">
+      <VisualElements DisplayName="Daily Motivator" Logo="Assets\150-150.png" SmallLogo="Assets\30-30.png" Description="Daily Motivator" ForegroundText="light" BackgroundColor="#2995F7">
+        <DefaultTile ShowName="allLogos" WideLogo="Assets\310-150.png" />
+        <SplashScreen Image="Assets\620-300.png" BackgroundColor="#2995F7" />
+        <InitialRotationPreference>
+          <Rotation Preference="landscape" />
+        </InitialRotationPreference>
+      </VisualElements>
+      <Extensions>
+        <Extension Category="windows.search" />
+        <Extension Category="windows.fileTypeAssociation">
+          <FileTypeAssociation Name="xmlandtxtfiles">
+            <DisplayName>TextFiles</DisplayName>
+            <SupportedFileTypes>
+              <FileType>.txt</FileType>
+              <FileType>.xml</FileType>
+            </SupportedFileTypes>
+          </FileTypeAssociation>
+        </Extension>
+        <Extension Category="windows.fileSavePicker">
+          <FileSavePicker>
+            <SupportedFileTypes>
+              <FileType>.xml</FileType>
+            </SupportedFileTypes>
+          </FileSavePicker>
+        </Extension>
+        <Extension Category="windows.fileOpenPicker">
+          <FileOpenPicker>
+            <SupportedFileTypes>
+              <FileType>.xml</FileType>
+            </SupportedFileTypes>
+          </FileOpenPicker>
+        </Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="removableStorage" />
+    <Capability Name="documentsLibrary" />
+    <Capability Name="internetClient" />
+  </Capabilities>
+</Package>
