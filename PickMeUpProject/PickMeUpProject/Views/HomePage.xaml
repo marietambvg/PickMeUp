@@ -16,6 +16,24 @@
         * Row 0 contains the back button and page title
         * Row 1 contains the rest of the page layout
     -->
+    <Page.BottomAppBar>
+        <AppBar>
+            <Grid>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button
+                       
+                        ToolTipService.ToolTip="View recent articles"
+                        Click="ShowRecentArticlesHyperlinkClick"
+                         Style="{StaticResource ViewAllAppBarButtonStyle}">
+                        <Button.DataContext>
+                            <ViewModels:DMRecentArticlesViewModel/>
+                        </Button.DataContext>
+                    </Button>
+                    
+                </StackPanel>
+            </Grid>
+        </AppBar>
+    </Page.BottomAppBar>
     <Grid Style="{StaticResource LayoutRootStyle}">
         <Grid.DataContext>
             <ViewModels:DMRecentArticlesViewModel/>
@@ -41,11 +59,9 @@
         </Grid>
 
         <!-- Page content -->
-        
-            <Grid Grid.Row="1" Grid.Column="1" >
-                
-            
-            <TextBlock Width="1200" Text="{Binding Path=RecentArticlesCollection[0].Content}"
+
+        <Grid Name="ContentHolder" Grid.Row="1" Grid.Column="1" DataContext="{Binding Path=RecentArticlesCollection[0]}">
+                <TextBlock Name="Content" Width="1200" Text="{Binding Content}"
             	Grid.Row="1"
             	FontSize="20"
             	Foreground="DarkGreen" FontWeight="Bold"
@@ -61,7 +77,7 @@
         <!--<WebView ></WebView>-->
         <TextBlock VerticalAlignment="Bottom" Padding="5 30 0 20" Grid.Row="2" Grid.Column="1" TextAlignment="Left" FontSize="10" Foreground="Yellow">Copyright ©2013 Ralph S. Marston, Jr. All Rights Reserved.
 Read more at http://greatday.com</TextBlock>
-        <HyperlinkButton  Foreground="White" FontWeight="Bold" Grid.Row="2" Grid.Column="1" FontSize="30"  Name="ShowRecentArticlesHyperlink" Padding="1000 0 0 0" Click="ShowRecentArticlesHyperlinkClick">Pick an article</HyperlinkButton> 
+       
 
         <VisualStateManager.VisualStateGroups>
 

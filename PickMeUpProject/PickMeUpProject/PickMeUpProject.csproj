@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>PickMeUpProject_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>A889C50B26E01B8119117715F319FF53F6837404</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -115,12 +116,22 @@
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Data\DataPersister.cs" />
     <Compile Include="Data\HttpRequest.cs" />
+    <Compile Include="ViewModels\LocalArticleViewModel.cs" />
     <Compile Include="ViewModels\SearchResultsViewModel.cs" />
+    <Compile Include="Views\AboutUserControl.xaml.cs">
+      <DependentUpon>AboutUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ArticleContentPage.xaml.cs">
       <DependentUpon>ArticleContentPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LocalArticlePage.xaml.cs">
+      <DependentUpon>LocalArticlePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PreferencesUserControl.xaml.cs">
+      <DependentUpon>PreferencesUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\RecentArticlesPage.xaml.cs">
       <DependentUpon>RecentArticlesPage.xaml</DependentUpon>
@@ -167,11 +178,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\AboutUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ArticleContentPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LocalArticlePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PreferencesUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -185,6 +208,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Callisto">
+      <HintPath>..\packages\Callisto.1.3.1\lib\winrt45\Callisto.dll</HintPath>
+    </Reference>
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\winrt45\HtmlAgilityPack.dll</HintPath>
     </Reference>

@@ -1,13 +1,16 @@
-﻿using System;
+﻿using PickMeUpProject.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using PickMeUpProject.ViewModels;
+using System.Xml.Serialization;
 using Windows.Data.Xml.Dom;
+using Windows.Storage;
+using Windows.Storage.Streams;
 
 namespace PickMeUpProject.Data
 {
@@ -19,10 +22,10 @@ namespace PickMeUpProject.Data
 
         public static Task<IEnumerable<CategoryViewModel>> GetCategories()
         {
-            
+
             var categoryListsModels =
                 HttpRequest.Get<IEnumerable<CategoryViewModel>>(BaseServicesUrl + "category");
-           
+
             return categoryListsModels;
         }
 
@@ -125,6 +128,61 @@ namespace PickMeUpProject.Data
             return document;
         }
 
+        public static async Task WriteXml<T>(T article, StorageFile file)
+        {
+            try
+            {
+                StringWriter sw = new StringWriter();
+                XmlSerializer xmlser = new XmlSerializer(typeof(T));
+                xmlser.Serialize(sw, article);
+
+                using (IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    using (IOutputStream outputStream = fileStream.GetOutputStreamAt(0))
+                    {
+                        using (DataWriter dataWriter = new DataWriter(outputStream))
+                        {
+                            dataWriter.WriteString(sw.ToString());
+                            await dataWriter.StoreAsync();
+                            dataWriter.DetachStream();
+                        }
+
+                        await outputStream.FlushAsync();
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new NotImplementedException(e.Message.ToString());
+
+            }
+
+        }
+
+        public static async Task SaveXml<T>(T article)
+        {
+            var savePicker = new Windows.Storage.Pickers.FileSavePicker();
+
+            var xmlFileTypes = new List<string>(new string[] { ".xml" });
+
+
+
+            savePicker.FileTypeChoices.Add(
+                new KeyValuePair<string, IList<string>>("XML File", xmlFileTypes)
+                );
+
+
+            var saveFile = await savePicker.PickSaveFileAsync();
+
+
+            if (saveFile != null)
+            {
+
+                await WriteXml(article, saveFile);
+            }
+        }
+
         public static async Task SaveFile(XDocument text)
         {
             var savePicker = new Windows.Storage.Pickers.FileSavePicker();
@@ -144,6 +202,7 @@ namespace PickMeUpProject.Data
             if (saveFile != null)
             {
                 await Windows.Storage.FileIO.WriteTextAsync(saveFile, text.ToString());
+
 
                 await new Windows.UI.Popups.MessageDialog("File Saved!").ShowAsync();
             }

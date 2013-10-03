@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="PickMeUpProject.App">
-      <VisualElements DisplayName="Daily Motivator" Logo="Assets\150-150.png" SmallLogo="Assets\30-30.png" Description="Daily Motivator" ForegroundText="light" BackgroundColor="#2995F7">
+      <VisualElements DisplayName="Daily Motivator" Logo="Assets\150-150.png" SmallLogo="Assets\30-30.png" Description="Daily Motivator" ForegroundText="light" BackgroundColor="#2995F7" ToastCapable="true">
         <DefaultTile ShowName="allLogos" WideLogo="Assets\310-150.png" />
         <SplashScreen Image="Assets\620-300.png" BackgroundColor="#2995F7" />
         <InitialRotationPreference>
@@ -54,5 +54,6 @@
     <Capability Name="removableStorage" />
     <Capability Name="documentsLibrary" />
     <Capability Name="internetClient" />
+    <DeviceCapability Name="location" />
   </Capabilities>
 </Package>

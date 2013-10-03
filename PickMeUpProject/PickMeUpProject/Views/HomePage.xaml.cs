@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Windows.ApplicationModel.DataTransfer;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -25,11 +26,7 @@ namespace PickMeUpProject.Views
            pageRoot.DataContext = new DMRecentArticlesViewModel();
         }
 
-        //protected override void OnNavigatedTo(NavigationEventArgs e)
-        //{
-        //    base.OnNavigatedTo(e);
-        //    //ShowRecentArticlesHyperlink.Content = "I just change the content";
-        //}
+        
 
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
@@ -42,6 +39,22 @@ namespace PickMeUpProject.Views
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
+            DataTransferManager.GetForCurrentView().DataRequested += OnDataRequested;
+        }
+
+        void OnDataRequested(DataTransferManager sender, DataRequestedEventArgs args)
+        {
+            var request = args.Request;
+            var item = ContentHolder.DataContext as DMArticleDetailsViewModel;
+            request.Data.Properties.Title = "The Daily Motivator - " + item.Title;
+
+
+            // Share recipe text
+            var shareMessage = item.Description;
+            shareMessage += Environment.NewLine;
+            shareMessage += "Read the whole text at :";
+            shareMessage += (item.Link);
+            request.Data.SetText(shareMessage);
         }
 
         /// <summary>
@@ -52,6 +65,7 @@ namespace PickMeUpProject.Views
         /// <param name="pageState">An empty dictionary to be populated with serializable state.</param>
         protected override void SaveState(Dictionary<String, Object> pageState)
         {
+            DataTransferManager.GetForCurrentView().DataRequested -= OnDataRequested;
         }
 
         public void ShowRecentArticlesHyperlinkClick(object sender, RoutedEventArgs e)

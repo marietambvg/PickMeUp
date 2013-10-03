@@ -1,9 +1,17 @@
-﻿using PickMeUpProject.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Windows.ApplicationModel.DataTransfer;
+using System.IO;
+using System.Linq;
+using PickMeUpProject.ViewModels;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -12,26 +20,15 @@ namespace PickMeUpProject.Views
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class ArticleContentPage : PickMeUpProject.Common.LayoutAwarePage
+    public sealed partial class LocalArticlePage : PickMeUpProject.Common.LayoutAwarePage
     {
-        
-        DMArticleDetailsViewModel navigationParam = new DMArticleDetailsViewModel();
-        public ArticleContentPage()
+        LocalArticleViewModel model = new LocalArticleViewModel();
+        public LocalArticlePage()
         {
             this.InitializeComponent();
-            //this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
         }
-        
-        //protected override void OnNavigatedTo(NavigationEventArgs e)
-        //{
-        //    base.OnNavigatedTo(e);
-        //    this.navigationParameter = e.Parameter as DMArticleDetailsViewModel;
-        //    pageRoot.DataContext = navigationParameter;
-        //}
 
-
-
-        public void OpenLocalFile(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        public void OpenLocalFile(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(LocalArticlePage));
         }
@@ -47,25 +44,8 @@ namespace PickMeUpProject.Views
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            this.navigationParam = navigationParameter as DMArticleDetailsViewModel;
-            this.DataContext = navigationParam;
-            DataTransferManager.GetForCurrentView().DataRequested += OnDataRequested;
+            this.DataContext = model.LocalArticle;
         }
-        void OnDataRequested(DataTransferManager sender, DataRequestedEventArgs args)
-        {
-            var request = args.Request;
-            var item = this.DataContext as DMArticleDetailsViewModel;
-            request.Data.Properties.Title = "The Daily Motivator - "+item.Title;
-            
-
-            // Share recipe text
-            var shareMessage = item.Description;
-            shareMessage += Environment.NewLine;
-            shareMessage += "Read the whole text at :";
-            shareMessage += (item.Link);
-            request.Data.SetText(shareMessage);
-        }
-
 
         /// <summary>
         /// Preserves state associated with this page in case the application is suspended or the
@@ -75,7 +55,6 @@ namespace PickMeUpProject.Views
         /// <param name="pageState">An empty dictionary to be populated with serializable state.</param>
         protected override void SaveState(Dictionary<String, Object> pageState)
         {
-            DataTransferManager.GetForCurrentView().DataRequested -= OnDataRequested;
         }
     }
 }

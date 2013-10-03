@@ -6,7 +6,7 @@
 
     <Application.Resources>
         <ResourceDictionary>
-            <x:String x:Key="AppName">Daily Motivator</x:String>
+            <x:String x:Key="AppName">The Daily Motivator</x:String>
             <ResourceDictionary.MergedDictionaries>
 
                 <!-- 

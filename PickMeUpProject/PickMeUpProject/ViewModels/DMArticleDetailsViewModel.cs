@@ -74,7 +74,5 @@ namespace PickMeUpProject.ViewModels
             //this.LoadArticleContent("http://greatday.com");
         }
 
-
-
     }
 }

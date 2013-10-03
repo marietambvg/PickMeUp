@@ -1,8 +1,22 @@
-﻿using System;
+﻿using PickMeUpProject.Common;
+using System;
+using PickMeUpProject.ViewModels;
+using PickMeUpProject.Views;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.ApplicationSettings;
+using Callisto.Controls;
+using Windows.UI;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Notifications;
+using Windows.Networking.PushNotifications;
+using Windows.Security.Cryptography;
+using System.Net.Http;
+using Windows.Networking.Connectivity;
+using Windows.UI.Popups;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -17,6 +31,7 @@ namespace PickMeUpProject
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
+        private Color _background = Color.FromArgb(255, 1, 107, 207);
         public App()
         {
             this.InitializeComponent();
@@ -29,25 +44,54 @@ namespace PickMeUpProject
         /// search results, and so forth.
         /// </summary>
         /// <param name="args">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs args)
+        protected async override void OnLaunched(LaunchActivatedEventArgs args)
         {
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
+            if (args.PreviousExecutionState == ApplicationExecutionState.Running)
+            {
+                if (!String.IsNullOrEmpty(args.Arguments))
+                {
+                    DMArticleDetailsViewModel model = new DMArticleDetailsViewModel();
+
+                    string[] arguments = args.Arguments.Split(';');
+                    model.Title = arguments[0];
+                    model.Description = arguments[1];
+                    model.Link = arguments[2];
+                    model.Content = arguments[3];
+                    ((Frame)Window.Current.Content).Navigate(typeof(ArticleContentPage), model);
+                }
+                    
+                Window.Current.Activate();
+                return;
+            }
+
             if (rootFrame == null)
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
-
+                SuspensionManager.RegisterFrame(rootFrame, "AppFrame");
                 if (args.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     //TODO: Load state from previously suspended application
+                    await SuspensionManager.RestoreAsync();
                 }
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
             }
+            if (args.PreviousExecutionState == ApplicationExecutionState.ClosedByUser)
+            {
+                if (ApplicationData.Current.RoamingSettings.Values.ContainsKey("Remember"))
+                {
+                    bool remember = (bool)ApplicationData.Current.RoamingSettings.Values["Remember"];
+                    if (remember)
+                        await SuspensionManager.RestoreAsync();
+                }
+            }
+
 
             if (rootFrame.Content == null)
             {
@@ -60,6 +104,53 @@ namespace PickMeUpProject
                 }
             }
             // Ensure the current window is active
+            SettingsPane.GetForCurrentView().CommandsRequested += OnCommandsRequested;
+
+            TileUpdateManager.CreateTileUpdaterForApplication().Clear();
+            BadgeUpdateManager.CreateBadgeUpdaterForApplication().Clear();
+
+            // Register for push notifications
+            var profile = NetworkInformation.GetInternetConnectionProfile();
+
+            if (profile.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess)
+            {
+                var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+                var buffer = CryptographicBuffer.ConvertStringToBinary(channel.Uri, BinaryStringEncoding.Utf8);
+                var uri = CryptographicBuffer.EncodeToBase64String(buffer);
+                var client = new HttpClient();
+
+                try
+                {
+                    //var response = await client.GetAsync(new Uri("http://ContosoRecipes8.cloudapp.net?uri=" + uri + "&type=tile"));
+                    var response = await client.GetAsync(new Uri("http://greatday.com?uri=" + uri + "&type=tile"));
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        var dialog = new MessageDialog("Unable to open push notification channel");
+                        dialog.ShowAsync();
+                    }
+                }
+                catch (HttpRequestException)
+                {
+                    var dialog = new MessageDialog("Unable to open push notification channel");
+                    dialog.ShowAsync();
+                }
+            }
+
+            if (!String.IsNullOrEmpty(args.Arguments))
+            {
+                DMArticleDetailsViewModel model = new DMArticleDetailsViewModel();
+                string[] arguments = args.Arguments.Split(';');
+                model.Title = arguments[0];
+                model.Description = arguments[1];
+                model.Link = arguments[2];
+                model.Content = arguments[3];
+                rootFrame.Navigate(typeof(ArticleContentPage), model);
+                Window.Current.Content = rootFrame;
+                Window.Current.Activate();
+                return;
+            }
+
+
             Window.Current.Activate();
         }
 
@@ -70,10 +161,10 @@ namespace PickMeUpProject
         /// </summary>
         /// <param name="sender">The source of the suspend request.</param>
         /// <param name="e">Details about the suspend request.</param>
-        private void OnSuspending(object sender, SuspendingEventArgs e)
+        private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            //TODO: Save application state and stop any background activity
+            await SuspensionManager.SaveAsync();
             deferral.Complete();
         }
 
@@ -117,9 +208,40 @@ namespace PickMeUpProject
 
             frame.Navigate(typeof(Views.SearchResultsPage), args.QueryText);
             Window.Current.Content = frame;
-
+            SettingsPane.GetForCurrentView().CommandsRequested += OnCommandsRequested;
             // Ensure the current window is active
             Window.Current.Activate();
+        }
+
+        void OnCommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+        {
+            // Add an About command
+            var about = new SettingsCommand("about", "About", (handler) =>
+            {
+                var settings = new SettingsFlyout();
+                settings.Content = new Views.AboutUserControl();
+                settings.HeaderBrush = new SolidColorBrush(_background);
+                settings.Background = new SolidColorBrush(_background);
+                settings.HeaderText = "About";
+                settings.IsOpen = true;
+            });
+
+            args.Request.ApplicationCommands.Add(about);
+
+            var preferences = new SettingsCommand("preferences", "Preferences", (handler) =>
+            {
+                var settings = new SettingsFlyout();
+                settings.Content = new Views.PreferencesUserControl();
+                settings.HeaderBrush = new SolidColorBrush(_background);
+                settings.Background = new SolidColorBrush(_background);
+                settings.HeaderText = "Preferences";
+                settings.IsOpen = true;
+            });
+
+            args.Request.ApplicationCommands.Add(preferences);
+
+            
+
         }
     }
 }
