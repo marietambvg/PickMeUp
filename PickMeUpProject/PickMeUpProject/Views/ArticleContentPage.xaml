@@ -118,7 +118,7 @@ Read more at http://greatday.com</TextBlock>
                 VerticalAlignment="Top"
                 Text="{Binding Content, Mode=TwoWay}"  
                 Margin="50 0 50 20" 
-                FontSize="20"   
+                FontSize="25"   
                 Foreground="DarkGreen"  
                 FontWeight="Medium"
                 LineHeight="15"
