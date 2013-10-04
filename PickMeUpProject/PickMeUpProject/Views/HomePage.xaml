@@ -29,7 +29,15 @@
                             <ViewModels:DMRecentArticlesViewModel/>
                         </Button.DataContext>
                     </Button>
-                    
+
+                    <Button
+                        Name="Open"
+                        ToolTipService.ToolTip="Open local article"
+                        Click="OpenLocalFile"
+                        Style="{StaticResource OpenLocalAppBarButtonStyle}">
+
+                    </Button>
+
                 </StackPanel>
             </Grid>
         </AppBar>
@@ -45,7 +53,7 @@
            
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <!-- Back button and page title -->
@@ -59,31 +67,94 @@
         </Grid>
 
         <!-- Page content -->
-
-        <Grid Name="ContentHolder" Grid.Row="1" Grid.Column="1" DataContext="{Binding Path=RecentArticlesCollection[0]}">
-                <TextBlock Name="Content" Width="1200" Text="{Binding Content}"
-            	Grid.Row="1"
-            	FontSize="20"
-            	Foreground="DarkGreen" FontWeight="Bold"
+        <Grid x:Name="ContentHolder" Grid.Row="1" Grid.Column="1" DataContext="{Binding Path=RecentArticlesCollection[0]}">
+            <TextBlock 
+                VerticalAlignment="Top"
+                Name="Content" 
+                Text="{Binding Content, Mode=TwoWay}"  
+                Margin="120 0 500 20" 
+                FontSize="18"   
+                Foreground="DarkGreen"  
+                FontWeight="Medium"
                 LineHeight="15"
-                FontFamily="Ariel"
-                Padding="0 0 500 0"
-            	TextWrapping="Wrap"
-            	HorizontalAlignment="Left"
-            	VerticalAlignment="Stretch"/>
-
+                FontFamily="Segoe UI" 
+                TextWrapping="Wrap" ></TextBlock>
         </Grid>
-       
-        <!--<WebView ></WebView>-->
-        <TextBlock VerticalAlignment="Bottom" Padding="5 30 0 20" Grid.Row="2" Grid.Column="1" TextAlignment="Left" FontSize="10" Foreground="Yellow">Copyright ©2013 Ralph S. Marston, Jr. All Rights Reserved.
+        <Grid x:Name="PortraitContentHolder" Grid.Row="1" Grid.RowSpan="2"  Grid.Column="1" DataContext="{Binding Path=RecentArticlesCollection[0]}">
+            <ScrollViewer>
+            <TextBlock 
+                VerticalAlignment="Top"
+                Text="{Binding Content, Mode=TwoWay}"  
+                Margin="50 0 50 20" 
+                FontSize="20"   
+                Foreground="DarkGreen"  
+                FontWeight="Medium"
+                LineHeight="15"
+                FontFamily="Segoe UI" 
+                TextWrapping="Wrap" >
+            </TextBlock>
+            </ScrollViewer>
+        </Grid>
+        <Grid x:Name="SnappedContentHolder" Grid.Row="1" Grid.Column="1" DataContext="{Binding Path=RecentArticlesCollection[0]}">
+            <ScrollViewer>
+            <TextBlock 
+                VerticalAlignment="Top"
+                Text="{Binding Content, Mode=TwoWay}"  
+                Margin="15 0 15 20" 
+                FontSize="15"   
+                Foreground="DarkGreen"  
+                FontWeight="Medium"
+                LineHeight="10"
+                FontFamily="Segoe UI" 
+                TextWrapping="Wrap" >
+                
+            </TextBlock>
+            </ScrollViewer> 
+        </Grid>
+
+        <TextBlock
+            x:Name="Rights"
+            VerticalAlignment="Bottom" 
+            Padding="15 30 0 20" 
+            Grid.Row="2" Grid.Column="1" 
+            TextAlignment="Left" 
+            FontSize="10" 
+            Foreground="Yellow">Copyright ©2013 Ralph S. Marston, Jr. All Rights Reserved.
 Read more at http://greatday.com</TextBlock>
+        <TextBlock
+            x:Name="RightsSnapped"
+            VerticalAlignment="Bottom" 
+            Padding="5 30 0 20" 
+            Grid.Row="2" Grid.Column="1" 
+            TextAlignment="Left" 
+            FontSize="10" 
+            Foreground="Yellow">Copyright ©2013 Ralph S. Marston</TextBlock>
        
 
         <VisualStateManager.VisualStateGroups>
-
             <!-- Visual states reflect the application's view state -->
             <VisualStateGroup x:Name="ApplicationViewStates">
-                <VisualState x:Name="FullScreenLandscape"/>
+                <VisualState x:Name="FullScreenLandscape">
+                    <Storyboard>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentHolder" Storyboard.TargetProperty="Visibility">
+                    <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                </ObjectAnimationUsingKeyFrames>
+
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PortraitContentHolder" Storyboard.TargetProperty="Visibility">
+                    <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SnappedContentHolder" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Rights" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RightsSnapped" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+
                 <VisualState x:Name="Filled"/>
 
                 <!-- The entire page respects the narrower 100-pixel margin convention for portrait -->
@@ -92,6 +163,29 @@ Read more at http://greatday.com</TextBlock>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PortraitBackButtonStyle}"/>
                         </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PortraitContentHolder" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SnappedContentHolder" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentHolder" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Rights" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RightsSnapped" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+
+
+                        
+
                     </Storyboard>
                 </VisualState>
 
@@ -104,6 +198,25 @@ Read more at http://greatday.com</TextBlock>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="pageTitle" Storyboard.TargetProperty="Style">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedPageHeaderTextStyle}"/>
                         </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentHolder" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SnappedContentHolder" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PortraitContentHolder" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Rights" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RightsSnapped" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        
+
                     </Storyboard>
                 </VisualState>
             </VisualStateGroup>

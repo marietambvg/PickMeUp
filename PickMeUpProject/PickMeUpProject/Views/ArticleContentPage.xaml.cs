@@ -31,9 +31,10 @@ namespace PickMeUpProject.Views
 
 
 
-        public void OpenLocalFile(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        public async void OpenLocalFile(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(LocalArticlePage));
+            DMArticleDetailsViewModel pickedArticle = await (new LocalArticleViewModel()).GetLocalArticleData(); 
+            this.Frame.Navigate(typeof(LocalArticlePage), pickedArticle);
         }
 
         /// <summary>
@@ -60,8 +61,9 @@ namespace PickMeUpProject.Views
 
             // Share recipe text
             var shareMessage = item.Description;
-            shareMessage += Environment.NewLine;
+            shareMessage += "\n\r";
             shareMessage += "Read the whole text at :";
+            shareMessage += "\n\r";
             shareMessage += (item.Link);
             request.Data.SetText(shareMessage);
         }

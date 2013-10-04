@@ -114,26 +114,26 @@ namespace PickMeUpProject
 
             if (profile.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess)
             {
-                var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
-                var buffer = CryptographicBuffer.ConvertStringToBinary(channel.Uri, BinaryStringEncoding.Utf8);
-                var uri = CryptographicBuffer.EncodeToBase64String(buffer);
-                var client = new HttpClient();
+            //    var channel = await PushNotificationChannelManager.CreatePushNotificationChannelForApplicationAsync();
+            //    var buffer = CryptographicBuffer.ConvertStringToBinary(channel.Uri, BinaryStringEncoding.Utf8);
+            //    var uri = CryptographicBuffer.EncodeToBase64String(buffer);
+            //    var client = new HttpClient();
 
-                try
-                {
-                    //var response = await client.GetAsync(new Uri("http://ContosoRecipes8.cloudapp.net?uri=" + uri + "&type=tile"));
-                    var response = await client.GetAsync(new Uri("http://greatday.com?uri=" + uri + "&type=tile"));
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        var dialog = new MessageDialog("Unable to open push notification channel");
-                        dialog.ShowAsync();
-                    }
-                }
-                catch (HttpRequestException)
-                {
-                    var dialog = new MessageDialog("Unable to open push notification channel");
-                    dialog.ShowAsync();
-                }
+            //    try
+            //    {
+                    
+            //        var response = await client.GetAsync(new Uri("http://greatday.com?uri=" + uri + "&type=tile"));
+            //        if (!response.IsSuccessStatusCode)
+            //        {
+            //            var dialog = new MessageDialog("Unable to open push notification channel");
+            //            dialog.ShowAsync();
+            //        }
+            //    }
+            //    catch (HttpRequestException)
+            //    {
+            //        var dialog = new MessageDialog("Unable to open push notification channel");
+            //        dialog.ShowAsync();
+            //    }
             }
 
             if (!String.IsNullOrEmpty(args.Arguments))

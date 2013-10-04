@@ -21,12 +21,16 @@ namespace PickMeUpProject.Views
             this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
         }
 
+        public async void OpenLocalFile(object sender, RoutedEventArgs e)
+        {
+            DMArticleDetailsViewModel pickedArticle = await(new LocalArticleViewModel()).GetLocalArticleData();
+            this.Frame.Navigate(typeof(LocalArticlePage), pickedArticle);
+        }
+
         public void SetDataContent(object sender, RoutedEventArgs e)
         {
            pageRoot.DataContext = new DMRecentArticlesViewModel();
         }
-
-        
 
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also

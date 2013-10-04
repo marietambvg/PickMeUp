@@ -22,16 +22,18 @@ namespace PickMeUpProject.Views
     /// </summary>
     public sealed partial class LocalArticlePage : PickMeUpProject.Common.LayoutAwarePage
     {
-        LocalArticleViewModel model = new LocalArticleViewModel();
         public LocalArticlePage()
         {
             this.InitializeComponent();
         }
 
-        public void OpenLocalFile(object sender, RoutedEventArgs e)
+        public async void OpenLocalFile(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(LocalArticlePage));
+            DMArticleDetailsViewModel pickedArticle = await(new LocalArticleViewModel()).GetLocalArticleData();
+            this.Frame.Navigate(typeof(LocalArticlePage), pickedArticle);
         }
+
+       
 
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
@@ -44,7 +46,12 @@ namespace PickMeUpProject.Views
         /// session.  This will be null the first time a page is visited.</param>
         protected override void LoadState(Object navigationParameter, Dictionary<String, Object> pageState)
         {
-            this.DataContext = model.LocalArticle;
+        }
+
+        protected  override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            this.DataContext =  (e.Parameter as DMArticleDetailsViewModel);
         }
 
         /// <summary>

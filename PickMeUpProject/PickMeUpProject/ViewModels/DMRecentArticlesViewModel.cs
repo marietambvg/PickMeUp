@@ -76,20 +76,20 @@ namespace PickMeUpProject.ViewModels
 
         }
 
-        private ICommand showReminderCommand;
-        public ICommand ShowReminder
+        private ICommand showReminderAfterHourCommand;
+        public ICommand ShowReminderAfterOneHour
         {
             get
             {
-                if (this.showReminderCommand == null)
+                if (this.showReminderAfterHourCommand == null)
                 {
-                    this.showReminderCommand = new DelegateCommand<object>(this.HandleShowReminderCommand);
+                    this.showReminderAfterHourCommand = new DelegateCommand<object>(this.HandleShowReminderHourCommand);
                 }
-                return this.showReminderCommand;
+                return this.showReminderAfterHourCommand;
             }
         }
 
-        private async void HandleShowReminderCommand(object parameter)
+        private async void HandleShowReminderHourCommand(object parameter)
         {
             var notifier = ToastNotificationManager.CreateToastNotifier();
 
@@ -107,11 +107,46 @@ namespace PickMeUpProject.ViewModels
             element.Item(0).AppendChild(template.CreateTextNode("Take your daily motivation!"));
 
             // Schedule the toast to appear 30 seconds from now
-            var date = DateTimeOffset.Now.AddSeconds(5);
+            //var date = DateTimeOffset.Now.AddHours(1);
+            var date = DateTimeOffset.Now.AddSeconds(10);
             var stn = new ScheduledToastNotification(template, date);
             notifier.AddToSchedule(stn);
+        }
 
+        private ICommand showReminderAfterDayCommand;
+        public ICommand ShowReminderAfterOneDay
+        {
+            get
+            {
+                if (this.showReminderAfterDayCommand == null)
+                {
+                    this.showReminderAfterDayCommand = new DelegateCommand<object>(this.HandleShowReminderDayCommand);
+                }
+                return this.showReminderAfterDayCommand;
+            }
+        }
 
+        private async void HandleShowReminderDayCommand(object parameter)
+        {
+            var notifier = ToastNotificationManager.CreateToastNotifier();
+
+            // Make sure notifications are enabled
+            if (notifier.Setting != NotificationSetting.Enabled)
+            {
+                var dialog = new MessageDialog("Notifications are currently disabled");
+                await dialog.ShowAsync();
+                return;
+            }
+
+            // Get a toast template and insert a text node containing a message
+            var template = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText03);
+            var element = template.GetElementsByTagName("text");
+            element.Item(0).AppendChild(template.CreateTextNode("Take your daily motivation!"));
+
+            // Schedule the toast to appear 30 seconds from now
+            var date = DateTimeOffset.Now.AddDays(1);
+            var stn = new ScheduledToastNotification(template, date);
+            notifier.AddToSchedule(stn);
         }
 
 

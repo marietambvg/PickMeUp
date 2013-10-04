@@ -32,19 +32,39 @@
         <GridView 
             ItemsSource="{Binding SearchResultArticlesCollection}" 
             Grid.Row="1" 
-            Grid.RowSpan="2"
+            Height="500"
+            Margin="100 0 500 0"
             IsItemClickEnabled="True"
-            ItemClick="GridViewArticleClick">
+            VerticalAlignment="Top"
+            ItemClick="GridViewArticleClick"
+            >
             <GridView.ItemTemplate>
                 <DataTemplate >
-                    <StackPanel HorizontalAlignment="Left" Width="250" Height="180">
-                        <TextBlock Text="{Binding Title}" Foreground="Tomato" FontWeight="Bold"  FontSize="16"  Height="40" Margin="15,0,15,0"/>
-                        <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Foreground="Yellow" FontWeight="Bold"  Margin="15,0,15,10"/>
+                    <StackPanel 
+                        HorizontalAlignment="Left" 
+                        Width="250" 
+                        Height="180">
+                        <TextBlock 
+                            Text="{Binding Title}" 
+                            Foreground="Tomato" 
+                            FontFamily="Segoe UI" 
+                            FontWeight="ExtraBold" 
+                            FontSize="20"   
+                            Height="40" 
+                            Margin="15,0,15,0"/>
+                        <TextBlock 
+                            Text="{Binding Description}"
+                            TextWrapping="Wrap" 
+                            Foreground="DarkGreen" 
+                            FontWeight="Medium" 
+                            FontSize="15" 
+                            FontFamily="Segoe UI" 
+                            Margin="15,0,15,10"/>
                     </StackPanel>
                 </DataTemplate>
 
             </GridView.ItemTemplate>
-        </GridView>
+            </GridView>
 
         <VisualStateManager.VisualStateGroups>
 

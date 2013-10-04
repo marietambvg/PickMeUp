@@ -16,19 +16,11 @@ namespace PickMeUpProject.ViewModels
     public class LocalArticleViewModel : Common.BindableBase
     {
 
-
-        public DMArticleDetailsViewModel LocalArticle { get; set; }
-        
-
-        public LocalArticleViewModel()
-        {
-            this.GetLocalArticleData();
-        }
-
-        public async void GetLocalArticleData()
+        public async Task<DMArticleDetailsViewModel> GetLocalArticleData()
         {
             StorageFile file = await OpenFile();
-            this.LocalArticle = await LoadLocalArticles(file);
+            DMArticleDetailsViewModel localArticle = await LoadLocalArticles(file);
+            return localArticle;
         }
 
         private async Task<StorageFile> OpenFile()
@@ -40,18 +32,7 @@ namespace PickMeUpProject.ViewModels
             StorageFile file = await openPicker.PickSingleFileAsync();
             return file;
         }
-
-        private async Task<T> ReadXml<T>(StorageFile xmldata)
-        {
-            XmlSerializer xmlser = new XmlSerializer(typeof(List<T>));
-            T data;
-            using (var strm = await xmldata.OpenStreamForReadAsync())
-            {
-                TextReader Reader = new StreamReader(strm);
-                data = (T)xmlser.Deserialize(Reader);
-            }
-            return data;
-        }
+        
 
         private async Task<DMArticleDetailsViewModel> LoadLocalArticles(StorageFile file)
         {

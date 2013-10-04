@@ -10,9 +10,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     >
-    <Page.DataContext>
+    <!--<Page.DataContext>
         <ViewModels:LocalArticleViewModel/>
-    </Page.DataContext>
+    </Page.DataContext>-->
     <Page.BottomAppBar>
         <AppBar>
             <Grid>
@@ -34,9 +34,7 @@
                         ToolTipService.ToolTip="Open local article"
                         Click="OpenLocalFile"
                         Style="{StaticResource OpenLocalAppBarButtonStyle}">
-                        <Button.DataContext>
-                            <ViewModels:DMRecentArticlesViewModel/>
-                        </Button.DataContext>
+                        
                     </Button>
                 </StackPanel>
             </Grid>
@@ -47,7 +45,7 @@
         * Row 0 contains the back button and page title
         * Row 1 contains the rest of the page layout
     -->
-    <Grid DataContext="{Binding LocalArticle}"  Style="{StaticResource LayoutRootStyle}">
+    <Grid   Style="{StaticResource LayoutRootStyle}">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="140"/>
@@ -65,7 +63,17 @@
 
         <StackPanel  Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left">
 
-            <TextBlock  Name="Content" Text="{Binding Content, Mode=TwoWay}"  Margin="0 20 500 20" FontSize="18"   Foreground="DarkGreen"  FontWeight="Bold"  TextWrapping="Wrap" ></TextBlock>
+            <TextBlock  
+                Name="Content" 
+                Text="{Binding Content, Mode=TwoWay}"  
+                Margin="0 20 500 20" 
+                FontSize="18"   
+                Foreground="DarkGreen"  
+                FontWeight="Medium"
+                LineHeight="15"
+                FontFamily="Segoe UI" >
+                
+            </TextBlock>
             <TextBlock VerticalAlignment="Bottom" Padding="0 50 0 20" FontSize="10" Foreground="Yellow">Copyright ©2013 Ralph S. Marston, Jr. All Rights Reserved.
 Read more at http://greatday.com</TextBlock>
         </StackPanel>

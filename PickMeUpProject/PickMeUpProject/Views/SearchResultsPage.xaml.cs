@@ -17,7 +17,6 @@ namespace PickMeUpProject.Views
             this.InitializeComponent();
             this.currentViewModel = new ViewModels.SearchResultsViewModel();
             this.DataContext = this.currentViewModel;
-            this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
         }
 
         public void GridViewArticleClick(object sender, ItemClickEventArgs e)

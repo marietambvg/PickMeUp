@@ -25,7 +25,19 @@
                             <ViewModels:DMRecentArticlesViewModel/>
                         </Button.DataContext>
                     </Button>
-                    <Button x:Name="ReminderButton" HorizontalAlignment="Left" Style="{StaticResource ReminderAppBarButtonStyle}" Command="{Binding ShowReminder}" >
+                    <Button Name="AfterHourReminder" 
+                            HorizontalAlignment="Left" 
+                            ToolTipService.ToolTip="Remind me after one hour"
+                            Style="{StaticResource ReminderAppBarButtonStyle}"                            Command="{Binding ShowReminderAfterOneHour}" >
+                        <Button.DataContext>
+                            <ViewModels:DMRecentArticlesViewModel/>
+                        </Button.DataContext>
+                    </Button>
+                    <Button Name="AfterDayReminder" 
+                            HorizontalAlignment="Left" 
+                            ToolTipService.ToolTip="Remind me after one day"
+                            Style="{StaticResource ReminderAppBarButtonStyle}"                            Command="{Binding ShowReminderAfterOneDay}"
+                        >
                         <Button.DataContext>
                             <ViewModels:DMRecentArticlesViewModel/>
                         </Button.DataContext>
@@ -67,8 +79,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="1200"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Back button and page title -->
@@ -76,18 +88,91 @@
         <Button  Grid.Column="0" Grid.Row="0" x:Name="backButton" Click="GoBack" IsEnabled="{Binding Frame.CanGoBack, ElementName=pageRoot}" Style="{StaticResource BackButtonStyle}"/>
         <TextBlock x:Name="pageTitle" Grid.Row="0" Grid.Column="1" Text="{Binding Title}" Style="{StaticResource PageHeaderTextStyle}"/>
 
-        <StackPanel  Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <StackPanel x:Name="StackPanelContentHolder"  Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left">
 
-            <TextBlock  Name="Content" Text="{Binding Content, Mode=TwoWay}"  Margin="0 20 500 20" FontSize="18"   Foreground="DarkGreen"  FontWeight="Bold"  TextWrapping="Wrap" ></TextBlock>
+            <TextBlock 
+                VerticalAlignment="Top"
+                Name="Content" 
+                Text="{Binding Content, Mode=TwoWay}"  
+                Margin="0 0 500 20" 
+                FontSize="18"   
+                Foreground="DarkGreen"  
+                FontWeight="Medium"
+                LineHeight="15"
+                FontFamily="Segoe UI" 
+                TextWrapping="Wrap" ></TextBlock>
             <TextBlock VerticalAlignment="Bottom" Padding="0 50 0 20" FontSize="10" Foreground="Yellow">Copyright ©2013 Ralph S. Marston, Jr. All Rights Reserved.
 Read more at http://greatday.com</TextBlock>
         </StackPanel>
+        <StackPanel  x:Name="StackPanelPortraitContentHolder" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
+            </Grid>
+            <ScrollViewer Grid.Row="0"  VerticalAlignment="Top">
+                <TextBlock
+                Height="1150"
+                VerticalAlignment="Top"
+                Text="{Binding Content, Mode=TwoWay}"  
+                Margin="50 0 50 20" 
+                FontSize="20"   
+                Foreground="DarkGreen"  
+                FontWeight="Medium"
+                LineHeight="15"
+                FontFamily="Segoe UI" 
+                TextWrapping="Wrap" >
+                </TextBlock>
+            </ScrollViewer> 
+            <TextBlock Grid.Row="1" VerticalAlignment="Bottom" Padding="15 15 0 10"  FontSize="10" Foreground="Yellow">Copyright ©2013 Ralph S. Marston, Jr. All Rights Reserved.
+Read more at http://greatday.com</TextBlock>
+        </StackPanel>
+        
+        <StackPanel  x:Name="StackPanelSnappedContentHolder" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="500"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+            
+            <ScrollViewer  Grid.Row="0"  VerticalAlignment="Top">
+                <TextBlock
+                VerticalAlignment="Top"
+                Text="{Binding Content, Mode=TwoWay}"  
+                Margin="15 0 15 20" 
+                FontSize="15"   
+                Foreground="DarkGreen"  
+                FontWeight="Medium"
+                LineHeight="10"
+                FontFamily="Segoe UI" 
+                TextWrapping="Wrap"></TextBlock>
+            </ScrollViewer>
+           
+            <TextBlock Grid.Row="1" VerticalAlignment="Bottom" Padding="15 100 0 10"  FontSize="10" Foreground="Yellow">Copyright ©2013 Ralph S. Marston, Jr.</TextBlock></Grid>
+        </StackPanel>
         <VisualStateManager.VisualStateGroups>
 
             <!-- Visual states reflect the application's view state -->
             <VisualStateGroup x:Name="ApplicationViewStates">
-                <VisualState x:Name="FullScreenLandscape"/>
+                <VisualState x:Name="FullScreenLandscape">
+                    <Storyboard>
+                      <ObjectAnimationUsingKeyFrames Storyboard.TargetName="StackPanelPortraitContentHolder" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+
+                       <ObjectAnimationUsingKeyFrames Storyboard.TargetName="StackPanelSnappedContentHolder" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="StackPanelContentHolder" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+
+                </VisualState>
                 <VisualState x:Name="Filled"/>
 
                 <!-- The entire page respects the narrower 100-pixel margin convention for portrait -->
@@ -95,6 +180,18 @@ Read more at http://greatday.com</TextBlock>
                     <Storyboard>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="backButton" Storyboard.TargetProperty="Style">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PortraitBackButtonStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>
+                        
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="StackPanelPortraitContentHolder" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="StackPanelSnappedContentHolder" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="StackPanelContentHolder" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
@@ -107,6 +204,18 @@ Read more at http://greatday.com</TextBlock>
                         </ObjectAnimationUsingKeyFrames>
                         <ObjectAnimationUsingKeyFrames Storyboard.TargetName="pageTitle" Storyboard.TargetProperty="Style">
                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource SnappedPageHeaderTextStyle}"/>
+                        </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="StackPanelPortraitContentHolder" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                        </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="StackPanelSnappedContentHolder" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Visible"/>
+                        </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="StackPanelContentHolder" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
                         </ObjectAnimationUsingKeyFrames>
                     </Storyboard>
                 </VisualState>
